@@ -10,6 +10,9 @@ import BuilderToolbar from './BuilderToolbar';
 import { useProjectStore } from '../../store/projectStore';
 import { useEditorStore } from '../../store/editorStore';
 import { COMPONENT_REGISTRY } from '../registry.jsx';
+import ThemePanel from './ThemePanel';
+import { useThemeStore, syncCSSVariables } from '../../store/themeStore';
+import { useEffect } from 'react';
 
 // Drop Animation Config
 const dropAnimation = {
@@ -22,7 +25,17 @@ const dropAnimation = {
 
 const BuilderLayout = () => {
     const [activeDragItem, setActiveDragItem] = useState(null);
+    const [showThemePanel, setShowThemePanel] = useState(false);
     const addNode = useProjectStore((state) => state.addNode);
+
+    const activeTheme = useThemeStore((state) => state.themes[state.activeThemeId]);
+
+    // Initialize Theme Variables
+    useEffect(() => {
+        if (activeTheme) {
+            syncCSSVariables(activeTheme.tokens);
+        }
+    }, [activeTheme]);
     
     // ViewPort State
     const viewPort = useEditorStore((state) => state.viewPort);
@@ -70,7 +83,11 @@ const BuilderLayout = () => {
     return (
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             <div className="flex flex-col h-screen overflow-hidden">
-                <BuilderToolbar />
+                <BuilderToolbar 
+                onToggleThemePanel={() => setShowThemePanel(!showThemePanel)} 
+                isThemePanelOpen={showThemePanel}
+            />
+            {showThemePanel && <ThemePanel onClose={() => setShowThemePanel(false)} />}
                 
                 <div className="flex-1 flex overflow-hidden">
                     <ComponentPanel />

@@ -15,10 +15,11 @@ import { useEditorStore } from '../../store/editorStore';
 import PageManager from './PageManager';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import PaletteIcon from '@mui/icons-material/Palette';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const BuilderToolbar = () => {
+const BuilderToolbar = ({ onToggleThemePanel, isThemePanelOpen }) => {
   const mode = useEditorStore((state) => state.mode);
   const setMode = useEditorStore((state) => state.setMode);
   const viewPort = useEditorStore((state) => state.viewPort);
@@ -116,9 +117,18 @@ const BuilderToolbar = () => {
         <div className="hidden xl:flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20 mr-2">
             <CheckCircleOutlineIcon sx={{ fontSize: 12 }} />
             <span>SAVED</span>
-        </div>
+          </div>
 
-        <label className="cursor-pointer">
+          <button 
+                onClick={onToggleThemePanel}
+                className={`p-2 rounded-xl transition-all ${isThemePanelOpen ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'text-slate-500 hover:text-indigo-600 hover:bg-white dark:hover:bg-slate-800'}`}
+                title="Site Design & Tokens"
+            >
+                <PaletteIcon fontSize="small" />
+            </button>
+
+          <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
+            <label className="cursor-pointer">
             <input type="file" accept=".json" onChange={handleImport} className="hidden" />
             <div className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-all" title="Import Project JSON">
                 <FileUploadIcon fontSize="small" />
