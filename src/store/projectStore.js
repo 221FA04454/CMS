@@ -347,6 +347,22 @@ export const useProjectStore = create(
            }
         }),
 
+        // Global Orchestration
+        setGlobalStyle: (category, key, value) => set((state) => {
+            if (state.globalStyles[category]) {
+                state.globalStyles[category][key] = value;
+                state.metadata.updatedAt = Date.now();
+            }
+        }),
+
+        resetProject: () => set((state) => {
+            const home = createEmptyPage('Home', '/', true);
+            state.pages = { 'page_home': home };
+            state.activePageId = 'page_home';
+            state.metadata.updatedAt = Date.now();
+            state.metadata.lastSavedAt = Date.now();
+        }),
+
         cloneNode: (nodeId) => set((state) => {
             const activePage = state.pages[state.activePageId];
             if (!activePage) return;
@@ -362,12 +378,10 @@ export const useProjectStore = create(
                 ...JSON.parse(JSON.stringify(node)),
                 id: newNodeId,
                 parentId: node.parentId,
-                children: [] // Simplified for now
+                children: [] // Simplified recursion for now
             };
 
             activePage.tree.entities[newNodeId] = newNode;
-            
-            // Insert after the original node in parent's children
             const index = parent.children.indexOf(nodeId);
             parent.children.splice(index + 1, 0, newNodeId);
             activePage.metadata.updatedAt = Date.now();

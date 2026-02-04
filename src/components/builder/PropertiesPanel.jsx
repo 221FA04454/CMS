@@ -89,18 +89,15 @@ const PropertiesPanel = () => {
 
             {/* Tabs */}
             <div className="flex border-b border-slate-200 dark:border-slate-800">
-                <button 
-                    onClick={() => setActiveTab('settings')}
-                    className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'settings' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                    Settings
-                </button>
-                <button 
-                    onClick={() => setActiveTab('style')}
-                    className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'style' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                    Styles
-                </button>
+                {['settings', 'style', 'project'].map((tab) => (
+                    <button 
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-colors ${activeTab === tab ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
 
             {/* Content */}
@@ -122,7 +119,7 @@ const PropertiesPanel = () => {
                                         <select 
                                             value={value}
                                             onChange={(e) => handlePropChange(key, e.target.value)}
-                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none"
+                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none transition-all"
                                         >
                                             {schema.options.map(opt => (
                                                 <option key={opt} value={opt}>{opt}</option>
@@ -133,14 +130,14 @@ const PropertiesPanel = () => {
                                             value={value}
                                             onChange={(e) => handlePropChange(key, e.target.value)}
                                             rows={4}
-                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none"
+                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none transition-all"
                                         />
                                     ) : (
                                         <input 
                                             type={schema.type || 'text'} 
                                             value={value} 
                                             onChange={(e) => handlePropChange(key, e.target.value)}
-                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                                            className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium"
                                         />
                                     )}
                                 </div>
@@ -149,11 +146,11 @@ const PropertiesPanel = () => {
                         
                         {(!componentDef?.propSchema || Object.keys(componentDef.propSchema).length === 0) && (
                             <div className="flex flex-col items-center justify-center py-10 text-center">
-                                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-3">
+                                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-3 animate-pulse">
                                     ?
                                 </div>
-                                <p className="text-xs text-slate-400 font-medium italic px-4">
-                                    No configurable settings for this element.
+                                <p className="text-[11px] text-slate-400 font-bold italic px-4 leading-relaxed">
+                                    NO CONFIGURABLE <br/> SETTINGS FOR THIS ELEMENT.
                                 </p>
                             </div>
                         )}
@@ -165,64 +162,37 @@ const PropertiesPanel = () => {
                     <div className="space-y-6">
                          {/* Typography */}
                          <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase">Typography</h3>
-                            <div className="grid grid-cols-2 gap-3">
+                            <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Typography</h3>
+                            <div className="grid grid-cols-2 gap-3 p-1">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Color</label>
-                                    <input type="color" className="w-full h-8 rounded cursor-pointer" 
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Color</label>
+                                    <input type="color" className="w-full h-10 rounded-lg cursor-pointer border-2 border-transparent hover:border-indigo-500 transition-all bg-transparent" 
                                         onChange={(e) => handleStyleChange('color', e.target.value)} 
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Size (px)</label>
-                                    <input type="number" className="w-full p-1 text-sm border rounded dark:bg-slate-800 dark:border-slate-700" 
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Size (px)</label>
+                                    <input type="number" className="w-full p-2 text-sm border-2 border-slate-100 rounded-lg dark:bg-slate-800 dark:border-slate-800 focus:border-indigo-500 transition-all" 
                                         onChange={(e) => handleStyleChange('fontSize', e.target.value)} 
                                     />
-                                </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Align</label>
-                                    <select className="w-full p-1 text-sm border rounded dark:bg-slate-800 dark:border-slate-700"
-                                        onChange={(e) => handleStyleChange('textAlign', e.target.value)}
-                                    >
-                                        <option value="left">Left</option>
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
 
-                        <hr className="border-slate-100 dark:border-slate-800" />
-
-                        {/* Layout */}
+                        {/* Layout Props */}
                         <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase">Layout</h3>
-                            <div className="grid grid-cols-2 gap-3">
+                            <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Layout</h3>
+                            <div className="grid grid-cols-2 gap-3 p-1">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Background</label>
-                                    <input type="color" className="w-full h-8 rounded cursor-pointer" 
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Background</label>
+                                    <input type="color" className="w-full h-10 rounded-lg cursor-pointer border-2 border-transparent hover:border-indigo-500 transition-all bg-transparent" 
                                         onChange={(e) => handleStyleChange('backgroundColor', e.target.value)} 
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Padding</label>
-                                    <input type="text" placeholder="e.g. 10" className="w-full p-1 text-sm border rounded dark:bg-slate-800 dark:border-slate-700" 
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase">Padding (px)</label>
+                                    <input type="text" placeholder="20" className="w-full p-2 text-sm border-2 border-slate-100 rounded-lg dark:bg-slate-800 dark:border-slate-800 focus:border-indigo-500 transition-all" 
                                         onChange={(e) => handleStyleChange('padding', e.target.value)} 
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                         <hr className="border-slate-100 dark:border-slate-800" />
-
-                         {/* Border */}
-                         <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase">Border</h3>
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] text-slate-400">Radius</label>
-                                    <input type="text" placeholder="px" className="w-full p-1 text-sm border rounded dark:bg-slate-800 dark:border-slate-700" 
-                                        onChange={(e) => handleStyleChange('borderRadius', e.target.value)} 
                                     />
                                 </div>
                             </div>
@@ -230,6 +200,42 @@ const PropertiesPanel = () => {
                     </div>
                 )}
 
+                {/* --- PROJECT TAB (Global Design System) --- */}
+                {activeTab === 'project' && (
+                   <div className="space-y-8">
+                       <div className="bg-indigo-50 dark:bg-indigo-900/10 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-500/20">
+                           <h3 className="text-xs font-black text-indigo-700 dark:text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                               <span className="w-2 h-2 rounded-full bg-indigo-500 pulse"></span>
+                               Design System
+                           </h3>
+                           <p className="text-[10px] text-indigo-600 dark:text-indigo-300 font-medium leading-relaxed">
+                               Manage project-wide styles and global tokens here.
+                           </p>
+                       </div>
+
+                       <div className="space-y-4">
+                           <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Colors</h4>
+                           <div className="space-y-3">
+                               {[
+                                   { label: 'Primary Brand', key: 'primary', cat: 'colors' },
+                                   { label: 'Secondary', key: 'secondary', cat: 'colors' },
+                                   { label: 'Surface/BG', key: 'background', cat: 'colors' },
+                                   { label: 'Content/Text', key: 'text', cat: 'colors' }
+                               ].map((col) => (
+                                   <div key={col.key} className="flex items-center justify-between group">
+                                       <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{col.label}</span>
+                                       <input 
+                                            type="color" 
+                                            value={useProjectStore.getState().globalStyles[col.cat][col.key]}
+                                            onChange={(e) => useProjectStore.getState().setGlobalStyle(col.cat, col.key, e.target.value)}
+                                            className="w-10 h-6 rounded cursor-pointer border-none bg-transparent"
+                                       />
+                                   </div>
+                               ))}
+                           </div>
+                       </div>
+                   </div>
+                )}
             </div>
         </div>
     );
