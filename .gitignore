@@ -1,4 +1,5 @@
-# Logs
+logs
+!src/components/saas/logs/
 /logs
 *.log
 npm-debug.log*
