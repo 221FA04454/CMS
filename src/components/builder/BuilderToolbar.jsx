@@ -11,7 +11,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SaveIcon from '@mui/icons-material/Save';
 import { useProjectStore } from '../../store/projectStore';
-import { useTemplateStore } from '../../store/templateStore';
+
 import { generateStaticSite } from '../../utils/publishEngine';
 import { useEditorStore } from '../../store/editorStore';
 import PageManager from './PageManager';
@@ -26,7 +26,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const BuilderToolbar = ({ onToggleThemePanel, isThemePanelOpen, onOpenMarketplace, onOpenIntegration, onOpenAnalytics, onOpenAdmin }) => {
+const BuilderToolbar = ({ onToggleThemePanel, isThemePanelOpen, onOpenMarketplace }) => {
   const navigate = useNavigate();
   const mode = useEditorStore((state) => state.mode);
   const setMode = useEditorStore((state) => state.setMode);
@@ -36,7 +36,7 @@ const BuilderToolbar = ({ onToggleThemePanel, isThemePanelOpen, onOpenMarketplac
   // Store Actions & State
   const exportProject = useProjectStore((state) => state.exportProjectJSON);
   const importProject = useProjectStore((state) => state.importProjectJSON);
-  const metadata = useProjectStore((state) => state.metadata);
+
 
   // Safe Access to Zundo Temporal Store
   const temporal = useProjectStore.temporal;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Chip } from '@mui/material';
 import { MousePointer2, Sparkles, Lock } from 'lucide-react';
 
-const AnalyticsHeatmap = ({ pageName = "/home" }) => {
+const AnalyticsHeatmap = () => {
     const [heatDots, setHeatDots] = React.useState([]);
 
     React.useEffect(() => {

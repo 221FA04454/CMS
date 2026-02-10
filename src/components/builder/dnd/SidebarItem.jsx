@@ -2,7 +2,7 @@ import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 
 const SidebarItem = ({ type, label, icon }) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef } = useDraggable({
     id: `sidebar-${type}`,
     data: {
       source: 'sidebar',
@@ -11,9 +11,7 @@ const SidebarItem = ({ type, label, icon }) => {
     }
   });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+
 
   return (
     <div 

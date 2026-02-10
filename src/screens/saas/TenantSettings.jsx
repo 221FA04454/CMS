@@ -34,14 +34,14 @@ const TabPanel = (props) => {
 const TenantSettings = () => {
     const { tenantId } = useParams();
     const navigate = useNavigate();
-    const { tenants, updateTenant, updateMemberRole, removeMember, deleteTenant, updateLimits, inviteUser } = useTenantStore();
+    const { tenants, updateTenant, updateMemberRole, removeMember, deleteTenant, updateLimits } = useTenantStore();
     const { addLog } = useLogStore();
     const { checkLimit, getTenantPlan, incrementUsage } = useUsageStore();
     const tenant = tenants[tenantId];
     
     // RBAC Check
     const canManageTenants = usePermission('manage_tenants');
-    const isOwner = usePermission('billing'); // Usually owners have billing access
+    // const isOwner = usePermission('billing'); // Usually owners have billing access
 
     const [activeTab, setActiveTab] = useState(0);
     const [showInvite, setShowInvite] = useState(false);
@@ -356,7 +356,7 @@ const TenantSettings = () => {
                 open={showUpgradeModal}
                 onClose={() => setShowUpgradeModal(false)}
                 currentPlanId={getTenantPlan(tenantId).id}
-                onUpgrade={(planId) => setShowUpgradeModal(false)}
+                onUpgrade={() => setShowUpgradeModal(false)}
             />
 
             <DeleteTenantModal 

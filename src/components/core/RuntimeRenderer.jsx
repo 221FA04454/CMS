@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useProjectStore } from '../../store/projectStore';
-import { getComponent } from '../registry.jsx';
+import { getComponent, UnknownComponent } from '../registry.jsx';
 import { handleEvent } from '../../utils/interactionRuntime';
 
 /**
@@ -16,10 +16,8 @@ const RuntimeRenderer = ({ nodeId }) => {
   const node = activePage?.tree?.entities?.[nodeId];
 
   // 1. Resolve Component
-  const Component = useMemo(() => {
-    if (!node) return null;
-    return getComponent(node.type);
-  }, [node?.type]);
+  const Component = getComponent(node?.type) || UnknownComponent;
+  const extraProps = Component === UnknownComponent ? { type: node?.type } : {};
 
   // 3. Style Resolution (Responsive)
   // Note: For simplicity, the runtime assumes 'desktop' or uses CSS Media Queries
@@ -44,6 +42,7 @@ const RuntimeRenderer = ({ nodeId }) => {
     <Component 
       id={node.id}
       {...node.props}
+      {...extraProps}
       style={computedStyle}
       onClick={(e) => {
           // Inhibit default only if it's a builder-managed event

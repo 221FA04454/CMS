@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { useProjectStore } from '../../store/projectStore';
 import { useEditorStore } from '../../store/editorStore'; // Import Editor Store
-import { getComponent } from '../registry.jsx';
+import { getComponent, UnknownComponent, COMPONENT_REGISTRY } from '../registry.jsx';
 import EditorBlock from '../builder/EditorBlock';
-import { COMPONENT_REGISTRY } from '../registry.jsx';
 import { handleEvent } from '../../utils/interactionRuntime';
 
 // Recursive Renderer Component
@@ -18,11 +17,9 @@ const Renderer = ({ nodeId }) => {
   const editorMode = useEditorStore((state) => state.mode);
   const viewPort = useEditorStore((state) => state.viewPort);
 
-  // Memoize logic to prevent updates if node hasn't changed
-  const Component = useMemo(() => {
-     if (!node) return null;
-     return getComponent(node.type);
-  }, [node?.type]);
+  // Component Resolution
+  const Component = getComponent(node?.type) || UnknownComponent;
+  const extraProps = Component === UnknownComponent ? { type: node?.type } : {};
 
   // Style Cascade Logic
   const computedStyle = useMemo(() => {
@@ -67,7 +64,7 @@ const Renderer = ({ nodeId }) => {
   // If root node (no parent), render directly
   if (!node.parentId) {
       return (
-         <Component id={node.id} {...node.props} style={finalStyle} onClick={(e) => handleEvent(node.id, 'onClick', e)}>
+         <Component id={node.id} {...node.props} {...extraProps} style={finalStyle} onClick={(e) => handleEvent(node.id, 'onClick', e)}>
             {editorMode === 'edit' ? (
                 <EditorBlock id={node.id} type={node.type} isContainer={true} style={finalStyle}>
                     {children}
@@ -83,6 +80,7 @@ const Renderer = ({ nodeId }) => {
           <Component 
             id={node.id}
             {...node.props}
+            {...extraProps}
             style={finalStyle}
             onClick={(e) => handleEvent(node.id, 'onClick', e)}
           >
@@ -102,6 +100,7 @@ const Renderer = ({ nodeId }) => {
       <Component 
         id={node.id}
         {...node.props}
+        {...extraProps}
         style={finalStyle}
         // Events are usually handled by EditorBlock in edit mode to avoid navigation
       >
