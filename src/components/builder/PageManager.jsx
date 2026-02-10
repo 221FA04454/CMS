@@ -27,7 +27,7 @@ const PageManager = () => {
     // Local UI State
     const [isOpen, setIsOpen] = useState(false);
     // const [isCreating, setIsCreating] = useState(false); // Unused logic
-    const [newPageName, setNewPageName] = useState('');
+    // const [newPageName, setNewPageName] = useState('');
     const [settingsPageId, setSettingsPageId] = useState(null);
     const [showGallery, setShowGallery] = useState(false);
     const [applyingToId, setApplyingToId] = useState(null);

@@ -4,7 +4,7 @@ import {
     TableHead, TableRow, IconButton, Tooltip, Paper 
 } from '@mui/material';
 import { MoreHorizontal, ExternalLink, Trash2 } from 'lucide-react';
-import { useLogStore } from '../../../store/saas/logStore';
+
 import TypeBadge from './TypeBadge';
 import SourceBadge from './SourceBadge';
 import TimestampBadge from './TimestampBadge';

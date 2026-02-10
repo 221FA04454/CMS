@@ -6,12 +6,12 @@ import { hashApiKey, generateRawKey } from '../../utils/security';
 
 export const useApiKeyStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             // apiKeys structure: { [tenantId]: [ApiKey, ...] }
             apiKeys: {},
             loading: false,
 
-            fetchApiKeys: async (tenantId) => {
+            fetchApiKeys: async () => {
                 set({ loading: true });
                 // Simulate API call
                 await new Promise(r => setTimeout(r, 400));

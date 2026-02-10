@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTemplateStore } from '../../store/templateStore';
-import { useProjectStore } from '../../store/projectStore';
+
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';

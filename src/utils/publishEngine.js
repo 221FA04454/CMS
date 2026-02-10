@@ -17,7 +17,7 @@ export const generateStaticSite = async () => {
 
     // 2. Process Pages
     const pagesOutput = Object.values(project.pages).map(page => {
-        const html = generatePageHTML(page, theme, project);
+        const html = generatePageHTML(page);
         return {
             fileName: page.slug === '/' ? 'index.html' : `${page.slug.replace('/', '')}.html`,
             content: html
@@ -38,12 +38,12 @@ export const generateStaticSite = async () => {
 /**
  * Atomic HTML Generator
  */
-const generatePageHTML = (page, theme, project) => {
+const generatePageHTML = (page) => {
     const renderNode = (nodeId) => {
         const node = page.tree.entities[nodeId];
         if (!node) return '';
 
-        const def = COMPONENT_REGISTRY[node.type];
+        if (!node) return '';
         const children = node.children?.map(childId => renderNode(childId)).join('') || '';
         
         // Map Props to Attributes

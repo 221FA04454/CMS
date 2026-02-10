@@ -9,7 +9,7 @@ import { nanoid } from 'nanoid';
  */
 export const useSaaSStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             // Current Context
             activeTenantId: 'tenant_default',
             currentUserRole: 'owner', // 'owner' | 'admin' | 'editor' | 'viewer'

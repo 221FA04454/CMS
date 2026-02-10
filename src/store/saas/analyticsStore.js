@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { nanoid } from 'nanoid';
+
 
 export const useAnalyticsStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             // Structure: { [projectId]: AnalyticsSummary }
             overview: {},
             // Structure: { [projectId]: { [pageId]: PageAnalytics } }

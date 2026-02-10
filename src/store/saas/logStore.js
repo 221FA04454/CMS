@@ -75,7 +75,7 @@ export const useLogStore = create(
             loading: false,
 
             // Actions
-            fetchLogs: async (tenantId) => {
+            fetchLogs: async () => {
                 set({ loading: true });
                 await new Promise(r => setTimeout(r, 600)); // Simulate API delay
                 set({ loading: false });

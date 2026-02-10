@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { useProjectStore } from '../store/projectStore';
+
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';

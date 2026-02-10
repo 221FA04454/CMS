@@ -5,7 +5,7 @@ import { tracker } from './analyticsTracker';
  * FlexiSite Interaction Interpreter
  * Executes logic based on component interaction metadata.
  */
-export const executeInteraction = (interaction, context) => {
+export const executeInteraction = (interaction) => {
     const { action, payload } = interaction;
     const store = useProjectStore.getState();
 

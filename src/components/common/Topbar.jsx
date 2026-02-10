@@ -12,8 +12,8 @@ import {
 } from '@mui/icons-material';
 
 const TopBar = () => {
-    const { tenants, activeTenantId } = useTenantStore();
-    const activeTenant = tenants[activeTenantId];
+    // const { tenants, activeTenantId } = useTenantStore();
+    // const activeTenant = tenants[activeTenantId];
 
     return (
         <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-40 transition-colors">

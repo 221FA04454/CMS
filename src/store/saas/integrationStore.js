@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 
 export const useIntegrationStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             integrations: {
                 'tenant_default': {
                     allowedDomains: ['*.flexisite.io', 'localhost:3000'],

@@ -18,8 +18,8 @@ const Renderer = ({ nodeId }) => {
   const viewPort = useEditorStore((state) => state.viewPort);
 
   // Component Resolution
-  const Component = getComponent(node?.type) || UnknownComponent;
-  const extraProps = Component === UnknownComponent ? { type: node?.type } : {};
+  const ResolvedComponent = getComponent(node?.type) || UnknownComponent;
+  const extraProps = ResolvedComponent === UnknownComponent ? { type: node?.type } : {};
 
   // Style Cascade Logic
   const computedStyle = useMemo(() => {
@@ -50,7 +50,7 @@ const Renderer = ({ nodeId }) => {
   const isHidden = node?.props?.hidden;
   
   if (isHidden && editorMode === 'preview') return null;
-  if (!node || !Component) return null;
+  if (!node || !ResolvedComponent) return null;
 
   const finalStyle = isHidden ? { ...computedStyle, opacity: 0.4, border: '2px dashed #ccc' } : computedStyle;
 
@@ -64,20 +64,20 @@ const Renderer = ({ nodeId }) => {
   // If root node (no parent), render directly
   if (!node.parentId) {
       return (
-         <Component id={node.id} {...node.props} {...extraProps} style={finalStyle} onClick={(e) => handleEvent(node.id, 'onClick', e)}>
+         <ResolvedComponent id={node.id} {...node.props} {...extraProps} style={finalStyle} onClick={(e) => handleEvent(node.id, 'onClick', e)}>
             {editorMode === 'edit' ? (
                 <EditorBlock id={node.id} type={node.type} isContainer={true} style={finalStyle}>
                     {children}
                 </EditorBlock>
             ) : children}
-         </Component>
+         </ResolvedComponent>
       )
   }
 
   // Preview Mode: No wrapper
   if (editorMode === 'preview') {
       return (
-          <Component 
+          <ResolvedComponent 
             id={node.id}
             {...node.props}
             {...extraProps}
@@ -85,7 +85,7 @@ const Renderer = ({ nodeId }) => {
             onClick={(e) => handleEvent(node.id, 'onClick', e)}
           >
             {children}
-          </Component>
+          </ResolvedComponent>
       );
   }
 
@@ -97,7 +97,7 @@ const Renderer = ({ nodeId }) => {
       isContainer={isContainer}
       style={finalStyle}
     >
-      <Component 
+      <ResolvedComponent 
         id={node.id}
         {...node.props}
         {...extraProps}
@@ -105,7 +105,7 @@ const Renderer = ({ nodeId }) => {
         // Events are usually handled by EditorBlock in edit mode to avoid navigation
       >
         {children}
-      </Component>
+      </ResolvedComponent>
     </EditorBlock>
   );
 };

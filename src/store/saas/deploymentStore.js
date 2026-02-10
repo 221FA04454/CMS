@@ -23,7 +23,7 @@ export const useDeploymentStore = create(
             deployments: {},
             loading: false,
 
-            fetchDeployments: async (projectId) => {
+            fetchDeployments: async () => {
                 set({ loading: true });
                 // Simulate production latency
                 await new Promise(r => setTimeout(r, 600));

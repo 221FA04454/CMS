@@ -13,7 +13,7 @@ export const ROLES = {
 
 export const useTenantStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             tenants: {
                 'tenant_default': {
                     id: 'tenant_default',

@@ -22,7 +22,7 @@ export const HEALTH_STATUS = {
 
 export const useDomainStore = create(
     persist(
-        immer((set, get) => ({
+        immer((set) => ({
             // Structure: { [tenantId]: [Domain, ...] }
             domains: {
                 'tenant_default': [
@@ -43,7 +43,7 @@ export const useDomainStore = create(
             },
             loading: false,
 
-            fetchDomains: async (tenantId) => {
+            fetchDomains: async () => {
                 set({ loading: true });
                 await new Promise(r => setTimeout(r, 500));
                 set({ loading: false });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
 
-const TimestampBadge = ({ timestamp, showLabel = true }) => {
+const TimestampBadge = ({ timestamp }) => {
     const date = new Date(timestamp);
     const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const dateStr = date.toLocaleDateString([], { month: 'short', day: 'numeric' });

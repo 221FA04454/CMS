@@ -16,8 +16,8 @@ const RuntimeRenderer = ({ nodeId }) => {
   const node = activePage?.tree?.entities?.[nodeId];
 
   // 1. Resolve Component
-  const Component = getComponent(node?.type) || UnknownComponent;
-  const extraProps = Component === UnknownComponent ? { type: node?.type } : {};
+  const ResolvedComponent = getComponent(node?.type) || UnknownComponent;
+  const extraProps = ResolvedComponent === UnknownComponent ? { type: node?.type } : {};
 
   // 3. Style Resolution (Responsive)
   // Note: For simplicity, the runtime assumes 'desktop' or uses CSS Media Queries
@@ -31,7 +31,7 @@ const RuntimeRenderer = ({ nodeId }) => {
   const isHidden = node?.props?.hidden;
   if (isHidden) return null;
 
-  if (!node || !Component) return null;
+  if (!node || !ResolvedComponent) return null;
 
   // 4. Render Children Recursively
   const children = node.children?.map((childId) => (
@@ -39,7 +39,7 @@ const RuntimeRenderer = ({ nodeId }) => {
   ));
 
   return (
-    <Component 
+    <ResolvedComponent 
       id={node.id}
       {...node.props}
       {...extraProps}
@@ -50,7 +50,7 @@ const RuntimeRenderer = ({ nodeId }) => {
       }}
     >
       {children}
-    </Component>
+    </ResolvedComponent>
   );
 };
 
