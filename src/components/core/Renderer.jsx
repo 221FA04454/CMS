@@ -48,9 +48,10 @@ const Renderer = ({ nodeId }) => {
     }
 
     return base;
-  }, [node?.style, viewPort]);
+  }, [node, viewPort]); // Added node to dependency
   
   const isHidden = node?.props?.hidden;
+  
   if (isHidden && editorMode === 'preview') return null;
   if (!node || !Component) return null;
 

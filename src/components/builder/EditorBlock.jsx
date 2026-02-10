@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { useEditorStore } from '../../store/editorStore';
 import clsx from 'clsx';

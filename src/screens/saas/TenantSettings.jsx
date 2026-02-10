@@ -22,6 +22,15 @@ import InviteUserModal from '../../components/saas/InviteUserModal';
 import TenantLimitsEditor from '../../components/saas/TenantLimitsEditor';
 import DeleteTenantModal from '../../components/saas/DeleteTenantModal';
 
+const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+    return (
+        <div role="tabpanel" hidden={value !== index} {...other}>
+            {value === index && <Box className="py-8">{children}</Box>}
+        </div>
+    );
+};
+
 const TenantSettings = () => {
     const { tenantId } = useParams();
     const navigate = useNavigate();
@@ -57,15 +66,6 @@ const TenantSettings = () => {
             metadata: { name: formData.name }
         });
         alert('Workspace settings updated successfully!');
-    };
-
-    const TabPanel = (props) => {
-        const { children, value, index, ...other } = props;
-        return (
-            <div role="tabpanel" hidden={value !== index} {...other}>
-                {value === index && <Box className="py-8">{children}</Box>}
-            </div>
-        );
     };
 
     return (

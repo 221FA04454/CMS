@@ -11,20 +11,14 @@ const PageSettingsModal = ({ pageId, onClose }) => {
 
     const page = pages[pageId];
 
-    const [name, setName] = useState('');
-    const [slug, setSlug] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    // State initialized from props
+    // We rely on the parent component to pass a unique `key` (e.g. pageId) 
+    // to force a re-mount when the page changes, avoiding the need for useEffect synchronization.
+    const [name, setName] = useState(page?.name || '');
+    const [slug, setSlug] = useState(page?.slug || '');
+    const [title, setTitle] = useState(page?.seo?.title || '');
+    const [description, setDescription] = useState(page?.seo?.description || '');
     const [isSaved, setIsSaved] = useState(false);
-
-    useEffect(() => {
-        if (page) {
-            setName(page.name);
-            setSlug(page.slug);
-            setTitle(page.seo?.title || '');
-            setDescription(page.seo?.description || '');
-        }
-    }, [page]);
 
     if (!page) return null;
 

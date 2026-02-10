@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 /**
@@ -7,7 +7,6 @@ import { createPortal } from 'react-dom';
  */
 const IframeSandbox = ({ children, title, head }) => {
   const [contentRef, setContentRef] = useState(null);
-  const frameRef = useRef();
 
   const mountNode = contentRef?.contentWindow?.document?.body;
   const mountHead = contentRef?.contentWindow?.document?.head;

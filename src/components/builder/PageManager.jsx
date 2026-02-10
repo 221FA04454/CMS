@@ -146,6 +146,7 @@ const PageManager = () => {
             {/* Modals */}
             {settingsPageId && (
                 <PageSettingsModal 
+                    key={settingsPageId}
                     pageId={settingsPageId} 
                     onClose={() => setSettingsPageId(null)} 
                 />

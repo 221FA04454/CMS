@@ -123,8 +123,14 @@ export const COMPONENT_REGISTRY = {
   }
 };
 
+const UnknownComponent = ({ type }) => <div className="text-red-500 text-xs">Unknown: {type}</div>;
+
 export const getComponent = (type) => {
-  return COMPONENT_REGISTRY[type]?.component || (() => <div className="text-red-500 text-xs">Unknown: {type}</div>);
+  if (COMPONENT_REGISTRY[type]?.component) {
+      return COMPONENT_REGISTRY[type].component;
+  }
+  // Return a wrapped component that passes the type prop
+  return (props) => <UnknownComponent type={type} {...props} />;
 };
 
 export const getComponentDef = (type) => {

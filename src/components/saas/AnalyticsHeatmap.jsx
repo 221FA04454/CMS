@@ -3,13 +3,17 @@ import { Box, Chip } from '@mui/material';
 import { MousePointer2, Sparkles, Lock } from 'lucide-react';
 
 const AnalyticsHeatmap = ({ pageName = "/home" }) => {
-    const heatDots = React.useMemo(() => [...Array(50)].map((_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        scale: Math.random() * 2,
-        opacity: Math.random()
-    })), []);
+    const [heatDots, setHeatDots] = React.useState([]);
+
+    React.useEffect(() => {
+        setHeatDots([...Array(50)].map((_, i) => ({
+            id: i,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            scale: Math.random() * 2,
+            opacity: Math.random()
+        })));
+    }, []);
 
     return (
         <div className="relative rounded-3xl overflow-hidden border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 group h-[500px]">

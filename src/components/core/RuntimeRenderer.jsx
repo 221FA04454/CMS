@@ -27,7 +27,7 @@ const RuntimeRenderer = ({ nodeId }) => {
   const computedStyle = useMemo(() => {
     if (!node?.style) return {};
     return node.style.desktop || {};
-  }, [node?.style]);
+  }, [node]);
 
   // 2. Visibility Check
   const isHidden = node?.props?.hidden;
