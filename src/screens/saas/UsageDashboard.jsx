@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useUsageStore } from '../../store/saas/usageStore';
 import { useTenantStore } from '../../store/saas/tenantStore';
-import { usePermission } from '../../hooks/usePermission';
+
 
 import UsageSummaryCards from '../../components/saas/usage/UsageSummaryCards';
 import UsageProgressBars from '../../components/saas/usage/UsageProgressBars';
@@ -23,7 +23,7 @@ const UsageDashboard = () => {
     } = useUsageStore();
 
     const [showUpgrade, setShowUpgrade] = useState(false);
-    const canManageBilling = usePermission('billing');
+
 
     useEffect(() => {
         if (activeTenantId) {

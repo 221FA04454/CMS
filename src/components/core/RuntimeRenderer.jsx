@@ -17,9 +17,8 @@ const RuntimeRenderer = ({ nodeId }) => {
   const node = activePage?.tree?.entities?.[nodeId];
 
   // 1. Resolve Component
-  // eslint-disable-next-line
-  const ResolvedComponent = useMemo(() => getComponent(node?.type) || UnknownComponent, [node?.type]);
-  const extraProps = ResolvedComponent === UnknownComponent ? { type: node?.type } : {};
+  const ComponentType = getComponent(node?.type) || UnknownComponent;
+  const extraProps = ComponentType === UnknownComponent ? { type: node?.type } : {};
 
   // 3. Style Resolution (Responsive)
   // Note: For simplicity, the runtime assumes 'desktop' or uses CSS Media Queries
@@ -33,27 +32,20 @@ const RuntimeRenderer = ({ nodeId }) => {
   const isHidden = node?.props?.hidden;
   if (isHidden) return null;
 
-  if (!node || !ResolvedComponent) return null;
+  if (!node || !ComponentType) return null;
 
   // 4. Render Children Recursively
   const children = node.children?.map((childId) => (
     <RuntimeRenderer key={childId} nodeId={childId} />
   ));
 
-  return (
-    <ResolvedComponent 
-      id={node.id}
-      {...node.props}
-      {...extraProps}
-      style={computedStyle}
-      onClick={(e) => {
-          // Inhibit default only if it's a builder-managed event
-          handleEvent(node.id, 'onClick', e);
-      }}
-    >
-      {children}
-    </ResolvedComponent>
-  );
+  return React.createElement(ComponentType, {
+      id: node.id,
+      ...node.props,
+      ...extraProps,
+      style: computedStyle,
+      onClick: (e) => handleEvent(node.id, 'onClick', e)
+  }, children);
 };
 
 export default RuntimeRenderer;

@@ -11,7 +11,6 @@ import {
 import { useDeploymentStore, DEPLOY_STATUS } from '../../store/saas/deploymentStore';
 import { useTenantStore } from '../../store/saas/tenantStore';
 import { usePermission } from '../../hooks/usePermission';
-import { useNavigate } from 'react-router-dom';
 import { useLogStore } from '../../store/saas/logStore';
 import { useUsageStore } from '../../store/saas/usageStore';
 import LimitWarningModal from '../../components/saas/usage/LimitWarningModal';
@@ -218,7 +217,7 @@ const DeploymentHistory = () => {
                 open={showUpgradeModal}
                 onClose={() => setShowUpgradeModal(false)}
                 currentPlanId={getTenantPlan(activeTenantId).id}
-                onUpgrade={(planId) => {
+                onUpgrade={() => {
                     // upgrade logic would be handled by a more global store usually,
                     // but for this demo we call it here.
                     setShowUpgradeModal(false);

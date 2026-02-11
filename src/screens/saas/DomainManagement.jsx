@@ -169,7 +169,7 @@ const DomainManagement = () => {
                 open={showUpgradeModal}
                 onClose={() => setShowUpgradeModal(false)}
                 currentPlanId={getTenantPlan(activeTenantId).id}
-                onUpgrade={(planId) => setShowUpgradeModal(false)}
+                onUpgrade={() => setShowUpgradeModal(false)}
             />
         </div>
     );

@@ -26,7 +26,7 @@ const LogsDashboard = () => {
         deleteLog, loading, selectedLogId, setSelectedLog 
     } = useLogStore();
     
-    const [viewMode, setViewMode] = useState('table'); // table or cards
+
     const [deleteQueued, setDeleteQueued] = useState(null);
 
     // Permission check

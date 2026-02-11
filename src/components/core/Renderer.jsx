@@ -19,9 +19,8 @@ const Renderer = ({ nodeId }) => {
   const viewPort = useEditorStore((state) => state.viewPort);
 
   // Component Resolution
-  // eslint-disable-next-line
-  const ResolvedComponent = useMemo(() => getComponent(node?.type) || UnknownComponent, [node?.type]);
-  const extraProps = ResolvedComponent === UnknownComponent ? { type: node?.type } : {};
+  const ComponentType = getComponent(node?.type) || UnknownComponent;
+  const extraProps = ComponentType === UnknownComponent ? { type: node?.type } : {};
 
   // Style Cascade Logic
   const computedStyle = useMemo(() => {
@@ -52,7 +51,7 @@ const Renderer = ({ nodeId }) => {
   const isHidden = node?.props?.hidden;
   
   if (isHidden && editorMode === 'preview') return null;
-  if (!node || !ResolvedComponent) return null;
+  if (!node || !ComponentType) return null;
 
   const finalStyle = isHidden ? { ...computedStyle, opacity: 0.4, border: '2px dashed #ccc' } : computedStyle;
 
@@ -64,31 +63,31 @@ const Renderer = ({ nodeId }) => {
   const isContainer = COMPONENT_REGISTRY[node.type]?.category === 'layout';
 
   // If root node (no parent), render directly
+  // If root node (no parent), render directly
   if (!node.parentId) {
-      return (
-         <ResolvedComponent id={node.id} {...node.props} {...extraProps} style={finalStyle} onClick={(e) => handleEvent(node.id, 'onClick', e)}>
-            {editorMode === 'edit' ? (
-                <EditorBlock id={node.id} type={node.type} isContainer={true} style={finalStyle}>
-                    {children}
-                </EditorBlock>
-            ) : children}
-         </ResolvedComponent>
-      )
+      return React.createElement(ComponentType, {
+          id: node.id,
+          ...node.props,
+          ...extraProps,
+          style: finalStyle,
+          onClick: (e) => handleEvent(node.id, 'onClick', e)
+      }, editorMode === 'edit' ? (
+        <EditorBlock id={node.id} type={node.type} isContainer={true} style={finalStyle}>
+            {children}
+        </EditorBlock>
+      ) : children);
   }
 
   // Preview Mode: No wrapper
+  // Preview Mode: No wrapper
   if (editorMode === 'preview') {
-      return (
-          <ResolvedComponent 
-            id={node.id}
-            {...node.props}
-            {...extraProps}
-            style={finalStyle}
-            onClick={(e) => handleEvent(node.id, 'onClick', e)}
-          >
-            {children}
-          </ResolvedComponent>
-      );
+      return React.createElement(ComponentType, {
+          id: node.id,
+          ...node.props,
+          ...extraProps,
+          style: finalStyle,
+          onClick: (e) => handleEvent(node.id, 'onClick', e)
+      }, children);
   }
 
   // Wrap generic components in EditorBlock
@@ -99,15 +98,12 @@ const Renderer = ({ nodeId }) => {
       isContainer={isContainer}
       style={finalStyle}
     >
-      <ResolvedComponent 
-        id={node.id}
-        {...node.props}
-        {...extraProps}
-        style={finalStyle}
-        // Events are usually handled by EditorBlock in edit mode to avoid navigation
-      >
-        {children}
-      </ResolvedComponent>
+      {React.createElement(ComponentType, {
+          id: node.id,
+          ...node.props,
+          ...extraProps,
+          style: finalStyle
+      }, children)}
     </EditorBlock>
   );
 };

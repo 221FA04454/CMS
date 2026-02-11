@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent } from '@mui/material';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-const StatCard = ({ label, value, icon: LucideIcon, trend, color, bg }) => {
+const StatCard = ({ label, value, icon, trend, color, bg }) => {
+    const LucideIcon = icon;
     const isPositive = trend.startsWith('+');
     
     return (
