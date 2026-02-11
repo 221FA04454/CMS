@@ -33,14 +33,14 @@ const DeploymentHistory = () => {
     const [rollbackTarget, setRollbackTarget] = useState(null);
     const [viewLogsDep, setViewLogsDep] = useState(null);
     const [search, setSearch] = useState('');
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const projectId = 'proj_1'; // Assuming corporate site for demo
     const canDeploy = usePermission('publish');
 
     useEffect(() => {
         if (projectId) fetchDeployments(projectId);
-    }, [projectId]);
+    }, [projectId, fetchDeployments]);
 
     const projectDeps = deployments[projectId] || [];
     const filteredDeps = projectDeps.filter(d => 

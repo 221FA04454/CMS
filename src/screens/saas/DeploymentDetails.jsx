@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
     Box, Button, Card, CardContent, Divider, 
@@ -15,7 +15,7 @@ import DeploymentLogsViewer from '../../components/saas/DeploymentLogsViewer';
 
 const DeploymentDetails = () => {
     const { deploymentId } = useParams();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { deployments } = useDeploymentStore();
 
     // Finding deployment across project keys (in a real app, we'd have a lookup)

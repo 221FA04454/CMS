@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useDomainStore, DOMAIN_STATUS, HEALTH_STATUS } from '../../store/saas/domainStore';
 import { useTenantStore } from '../../store/saas/tenantStore';
-import { usePermission } from '../../hooks/usePermission';
+// import { usePermission } from '../../hooks/usePermission';
 import DNSRecordsBlock from '../../components/saas/DNSRecordsBlock';
 import SSLStatusBadge from '../../components/saas/SSLStatusBadge';
 import DomainHealthBadge from '../../components/saas/DomainHealthBadge';
