@@ -32,16 +32,20 @@ const ComponentPanel = () => {
     };
 
     // Merge Plugin Components
-    Object.values(installedPlugins).forEach(plugin => {
-        if (!categories.plugins) categories.plugins = [];
-        plugin.components.forEach(comp => {
-            categories.plugins.push({
-                name: comp.label || comp.type,
-                type: comp.type,
-                icon: <ExtensionIcon sx={{ fontSize: 18 }} />
-            });
+    if (Array.isArray(installedPlugins)) {
+        installedPlugins.forEach(plugin => {
+            if (!categories.plugins) categories.plugins = [];
+            if (plugin.components) {
+                plugin.components.forEach(comp => {
+                    categories.plugins.push({
+                        name: comp.displayName || comp.type,
+                        type: comp.type,
+                        icon: <ExtensionIcon sx={{ fontSize: 18 }} />
+                    });
+                });
+            }
         });
-    });
+    }
 
     return (
         <div className="w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6 h-[calc(100vh-4rem)] overflow-y-auto transition-colors duration-300">

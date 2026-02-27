@@ -19,10 +19,14 @@ const IntegrationPanel = lazy(() => import('@screens/saas/IntegrationPanel'));
 const AnalyticsDashboard = lazy(() => import('@screens/saas/AnalyticsDashboard'));
 const LogsDashboard = lazy(() => import('@screens/saas/LogsDashboard'));
 const UsageDashboard = lazy(() => import('@screens/saas/UsageDashboard'));
-const TenantSettings = lazy(() => import('@screens/saas/TenantSettings'));
+const OrganizationSettingsPage = lazy(() => import('@screens/saas/OrganizationSettingsPage'));
 const DomainManagement = lazy(() => import('@screens/saas/DomainManagement'));
 const DomainDetails = lazy(() => import('@screens/saas/DomainDetails'));
 const DeploymentDetails = lazy(() => import('@screens/saas/DeploymentDetails'));
+
+// Plugin Ecosystem
+const PluginsPage = lazy(() => import('@screens/saas/PluginsPage'));
+const InstalledPluginsPage = lazy(() => import('@screens/saas/InstalledPluginsPage'));
 
 function App() {
   return (
@@ -47,10 +51,12 @@ function App() {
                    <Route path="deployments" element={<DeploymentHistory />} />
                    <Route path="deployments/:deploymentId" element={<DeploymentDetails />} />
                    <Route path="integrations" element={<IntegrationPanel />} />
+                   <Route path="plugins" element={<PluginsPage />} />
+                   <Route path="plugins/installed" element={<InstalledPluginsPage />} />
                    <Route path="analytics" element={<AnalyticsDashboard />} />
                    <Route path="logs" element={<LogsDashboard />} />
                    <Route path="usage" element={<UsageDashboard />} />
-                   <Route path="settings/:tenantId" element={<TenantSettings />} />
+                   <Route path="settings/:tenantId" element={<OrganizationSettingsPage />} />
                 </Route>
 
                 <Route path="*" element={<div className="p-10 text-center text-red-500 font-bold">404 - Architecture Fragment Not Found</div>} />
