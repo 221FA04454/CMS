@@ -63,7 +63,6 @@ const Renderer = ({ nodeId }) => {
   const isContainer = COMPONENT_REGISTRY[node.type]?.category === 'layout';
 
   // If root node (no parent), render directly
-  // If root node (no parent), render directly
   if (!node.parentId) {
       return React.createElement(ComponentType, {
           id: node.id,
@@ -72,7 +71,13 @@ const Renderer = ({ nodeId }) => {
           style: finalStyle,
           onClick: (e) => handleEvent(node.id, 'onClick', e)
       }, editorMode === 'edit' ? (
-        <EditorBlock id={node.id} type={node.type} isContainer={true} style={finalStyle}>
+        <EditorBlock 
+            id={node.id} 
+            type={node.type} 
+            isContainer={true} 
+            style={finalStyle} 
+            className="flex-1 w-full min-h-full flex flex-col"
+        >
             {children}
         </EditorBlock>
       ) : children);

@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useEditorStore } from '../../../store/editorStore';
 
 const Button = ({ 
   id, 
@@ -11,6 +12,9 @@ const Button = ({
   link,
   className 
 }) => {
+  // Gracefully check editor mode. Defaults to published if not found.
+  const mode = useEditorStore((state) => state?.mode) || 'published';
+
   const baseClasses = "inline-flex items-center justify-center px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-2";
   
   const variants = {
@@ -24,20 +28,29 @@ const Button = ({
     <span className="truncate">{text}</span>
   );
 
+  const handleClick = (e) => {
+    // Prevent accidental navigations/submissions while designing the page
+    if (mode === 'edit') {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Execute interactions registered via builder
+    if (onClick) {
+        onClick(e);
+    }
+  };
+
   if (link && link.trim() !== '') {
     return (
         <a 
             id={id}
             href={link}
-            target="_blank"
+            target={mode === 'edit' ? '_self' : '_blank'}
             rel="noopener noreferrer"
             className={twMerge(clsx(baseClasses, variants[variant], className))}
             style={style}
-            onClick={(e) => {
-                // Prevent navigation in editor mode
-                e.preventDefault();
-                if (onClick) onClick(e);
-            }}
+            onClick={handleClick}
         >
             {content}
         </a>
@@ -50,7 +63,7 @@ const Button = ({
       type="button"
       className={twMerge(clsx(baseClasses, variants[variant], className))}
       style={style}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {content}
     </button>

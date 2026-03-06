@@ -9,13 +9,12 @@ const Text = ({
   className 
 }) => {
   return (
-    <p
+    <div
       id={id}
-      className={twMerge(clsx('text-base text-slate-700 dark:text-slate-300 leading-relaxed', className))}
+      className={twMerge(clsx('text-base text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap', className))}
       style={style}
-    >
-      {content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-    </p>
+      dangerouslySetInnerHTML={{ __html: (content || 'Lorem ipsum').replace(/\n/g, '<br />') }}
+    />
   );
 };
 

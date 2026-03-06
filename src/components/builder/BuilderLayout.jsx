@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
-import { DndContext, DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core';
+import React, { useState, useEffect } from 'react';
+import { 
+  DndContext, 
+  DragOverlay, 
+  defaultDropAnimationSideEffects,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  pointerWithin
+} from '@dnd-kit/core';
 import { nanoid } from 'nanoid';
 import { createPortal } from 'react-dom';
 import Canvas from './Canvas';
@@ -17,7 +25,6 @@ import IntegrationPanel from './IntegrationPanel';
 import AnalyticsDashboard from './AnalyticsDashboard';
 import AdminDashboard from './AdminDashboard';
 import { useThemeStore, syncCSSVariables } from '../../store/themeStore';
-import { useEffect } from 'react';
 
 // Drop Animation Config
 const dropAnimation = {
@@ -38,6 +45,15 @@ const BuilderLayout = () => {
     const addNode = useProjectStore((state) => state.addNode);
 
     const activeTheme = useThemeStore((state) => state.themes[state.activeThemeId]);
+
+    // Make Drag and Drop more accurate - require 8px movement so clicks don't fire drags
+    const sensors = useSensors(
+      useSensor(PointerSensor, {
+        activationConstraint: {
+          distance: 8,
+        },
+      })
+    );
 
     // Initialize Theme Variables
     useEffect(() => {
@@ -86,16 +102,31 @@ const BuilderLayout = () => {
             };
             
             addNode(parentId, newNode);
+            
+            // Show feedback
+            useEditorStore.getState().showToast(`${registryItem?.label || type} added successfully`);
         }
     };
 
     const mode = useEditorStore((state) => state.mode);
+    const toastMessage = useEditorStore((state) => state.toastMessage);
+    const clearToast = useEditorStore((state) => state.clearToast);
+
+    // Auto-clear toast after 3 seconds
+    useEffect(() => {
+        if (toastMessage) {
+            const timer = setTimeout(() => {
+                clearToast();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toastMessage, clearToast]);
 
     return (
         <>
         {mode === 'preview' && <PreviewMode />}
-        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            <div className="flex flex-col h-screen overflow-hidden">
+        <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <div className="flex flex-col h-screen overflow-hidden relative">
                 <BuilderToolbar 
                 onToggleThemePanel={() => setShowThemePanel(!showThemePanel)} 
                 isThemePanelOpen={showThemePanel}
@@ -110,7 +141,7 @@ const BuilderLayout = () => {
             {showAnalytics && <AnalyticsDashboard onClose={() => setShowAnalytics(false)} />}
             {showAdmin && <AdminDashboard onClose={() => setShowAdmin(false)} />}
                 
-                <div className="flex-1 flex overflow-hidden">
+                <div className="flex-1 flex overflow-hidden relative">
                     <ComponentPanel />
                     
                     <div className="flex-1 overflow-hidden relative flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors">
@@ -135,6 +166,14 @@ const BuilderLayout = () => {
                                 </button>
                             ))}
                         </div>
+
+                        {/* Toast Notification */}
+                        {toastMessage && (
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                <span className="bg-green-500 rounded-full w-2.5 h-2.5 block"></span>
+                                <p className="text-sm font-medium">{toastMessage}</p>
+                            </div>
+                        )}
 
                         <Canvas />
                     </div>

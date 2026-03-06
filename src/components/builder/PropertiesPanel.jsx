@@ -13,22 +13,22 @@ import { nanoid } from 'nanoid';
 import { executeInteraction } from '../../utils/interactionRuntime';
 
 const PropertiesPanel = () => {
-    const selectedNodeId = useEditorStore((state) => state.selectedNodeId);
-    const selectNode = useEditorStore((state) => state.selectNode); 
-    const viewPort = useEditorStore((state) => state.viewPort); // Active Viewport
+    const selectedNodeId = useEditorStore((state) => state?.selectedNodeId);
+    const selectNode = useEditorStore((state) => state?.selectNode); 
+    const viewPort = useEditorStore((state) => state?.viewPort); // Active Viewport
     
-    const pages = useProjectStore((state) => state.pages);
-    const activePageId = useProjectStore((state) => state.activePageId);
-    const activePage = pages[activePageId];
+    const pages = useProjectStore((state) => state?.pages);
+    const activePageId = useProjectStore((state) => state?.activePageId);
+    const activePage = pages ? pages[activePageId] : null;
     const nodes = activePage?.tree?.entities || {};
 
-    const updateNodeProps = useProjectStore((state) => state.updateNodeProps);
-    const updateNodeStyle = useProjectStore((state) => state.updateNodeStyle);
-    const updateNodeInteractions = useProjectStore((state) => state.updateNodeInteractions);
-    const removeNode = useProjectStore((state) => state.removeNode);
-    const cloneNode = useProjectStore((state) => state.cloneNode);
-    const saveSectionAsTemplate = useProjectStore((state) => state.saveSectionAsTemplate);
-    const addTemplate = useTemplateStore((state) => state.addTemplate);
+    const updateNodeProps = useProjectStore((state) => state?.updateNodeProps);
+    const updateNodeStyle = useProjectStore((state) => state?.updateNodeStyle);
+    const updateNodeInteractions = useProjectStore((state) => state?.updateNodeInteractions);
+    const removeNode = useProjectStore((state) => state?.removeNode);
+    const cloneNode = useProjectStore((state) => state?.cloneNode);
+    const saveSectionAsTemplate = useProjectStore((state) => state?.saveSectionAsTemplate);
+    const addTemplate = useTemplateStore((state) => state?.addTemplate);
 
     const [activeTab, setActiveTab] = useState('settings'); 
 
@@ -36,11 +36,151 @@ const PropertiesPanel = () => {
 
     if (!node) {
         return (
-            <div className="w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-6 flex flex-col items-center justify-center text-slate-400">
-                <div className="w-16 h-16 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-4">
-                    ✨
+            <div className="w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 h-full flex flex-col transition-colors duration-300">
+                <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Page Settings</span>
+                    <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">{activePage?.name || 'Loading...'}</h2>
                 </div>
-                <span className="text-sm font-medium">Select an element to edit</span>
+                <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                    {/* Page Info */}
+                    <div className="space-y-4">
+                        <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">General</h3>
+                        <div className="flex flex-col gap-1 px-1">
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize">Page Name</label>
+                            <input 
+                                type="text" 
+                                value={activePage?.name || ''} 
+                                onChange={(e) => useProjectStore.getState().renamePage(activePageId, e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all font-medium text-slate-700 dark:text-slate-300" 
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1 px-1">
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize">Page Path / Slug</label>
+                            <input 
+                                type="text" 
+                                value={activePage?.slug || ''} 
+                                onChange={(e) => useProjectStore.getState().updatePageSlug(activePageId, e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all font-medium text-slate-700 dark:text-slate-300" 
+                            />
+                        </div>
+                    </div>
+
+                    {/* SEO */}
+                    <div className="space-y-4">
+                        <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Search Engine Optimization</h3>
+                        <div className="flex flex-col gap-1 px-1">
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize">SEO Title</label>
+                            <input 
+                                type="text" 
+                                value={activePage?.seo?.title || ''} 
+                                onChange={(e) => useProjectStore.getState().updatePageSEO(activePageId, { title: e.target.value })}
+                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all font-medium text-slate-700 dark:text-slate-300" 
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1 px-1">
+                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize">Meta Description</label>
+                            <textarea 
+                                rows={3}
+                                value={activePage?.seo?.description || ''} 
+                                onChange={(e) => useProjectStore.getState().updatePageSEO(activePageId, { description: e.target.value })}
+                                className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none transition-all text-slate-700 dark:text-slate-300" 
+                            />
+                        </div>
+                    </div>
+
+                    {/* Quick Add Suggestions */}
+                    <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center gap-2 px-1 text-indigo-500">
+                            <AutoAwesomeIcon sx={{ fontSize: 16 }} />
+                            <h3 className="text-[10px] font-black uppercase tracking-widest">Quick Add Elements</h3>
+                        </div>
+                        <p className="px-1 text-xs text-slate-500 dark:text-slate-400 mb-2">Instantly add elements to the page root.</p>
+                        
+                        {/* Structure */}
+                        <div className="space-y-2">
+                            <h4 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-1">Structure</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {['Section', 'Container', 'Card'].map(comp => (
+                                    <button
+                                        key={comp}
+                                        onClick={() => {
+                                            const rootId = activePage.tree.root;
+                                            const newNodeId = `${comp.toLowerCase()}_${nanoid(6)}`;
+                                            useProjectStore.getState().addNode(rootId, {
+                                                id: newNodeId,
+                                                type: comp,
+                                                props: COMPONENT_REGISTRY[comp]?.defaultProps || {},
+                                                style: { desktop: COMPONENT_REGISTRY[comp]?.defaultStyle || {} },
+                                                children: []
+                                            });
+                                            useEditorStore.getState().selectNode(newNodeId);
+                                            useEditorStore.getState().showToast(`${comp} added successfully`);
+                                        }}
+                                        className="p-2 border border-indigo-100 dark:border-indigo-900/30 bg-indigo-50/50 dark:bg-indigo-900/10 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 hover:border-indigo-300 rounded-lg text-indigo-700 dark:text-indigo-400 text-xs font-bold transition-all text-center flex items-center justify-center gap-1"
+                                    >
+                                        <span className="text-[10px]">+</span> {comp}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Basic Info */}
+                        <div className="space-y-2">
+                            <h4 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-1">Basic Elements</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {['Heading', 'Text', 'Button', 'Divider'].map(comp => (
+                                    <button
+                                        key={comp}
+                                        onClick={() => {
+                                            const rootId = activePage.tree.root;
+                                            const newNodeId = `${comp.toLowerCase()}_${nanoid(6)}`;
+                                            useProjectStore.getState().addNode(rootId, {
+                                                id: newNodeId,
+                                                type: comp,
+                                                props: COMPONENT_REGISTRY[comp]?.defaultProps || {},
+                                                style: { desktop: COMPONENT_REGISTRY[comp]?.defaultStyle || {} },
+                                                children: []
+                                            });
+                                            useEditorStore.getState().selectNode(newNodeId);
+                                            useEditorStore.getState().showToast(`${comp} added successfully`);
+                                        }}
+                                        className="p-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 text-[11px] font-medium transition-all text-center flex items-center justify-center gap-1"
+                                    >
+                                        <span className="text-[10px]">+</span> {comp}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Media */}
+                        <div className="space-y-2">
+                            <h4 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest px-1">Media</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {['Image'].map(comp => (
+                                    <button
+                                        key={comp}
+                                        onClick={() => {
+                                            const rootId = activePage.tree.root;
+                                            const newNodeId = `${comp.toLowerCase()}_${nanoid(6)}`;
+                                            useProjectStore.getState().addNode(rootId, {
+                                                id: newNodeId,
+                                                type: comp,
+                                                props: COMPONENT_REGISTRY[comp]?.defaultProps || {},
+                                                style: { desktop: COMPONENT_REGISTRY[comp]?.defaultStyle || {} },
+                                                children: []
+                                            });
+                                            useEditorStore.getState().selectNode(newNodeId);
+                                            useEditorStore.getState().showToast(`${comp} added successfully`);
+                                        }}
+                                        className="p-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 text-[11px] font-medium transition-all text-center flex flex-row items-center justify-center gap-1"
+                                    >
+                                        <span className="text-[10px]">+</span> {comp}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -341,10 +481,12 @@ const PropertiesPanel = () => {
                     onClick={() => {
                         const name = window.prompt(`Enter a name for this ${node.type} template:`, `${node.type} Template`);
                         if (name) {
-                            const tmplData = saveSectionAsTemplate(node.id, name);
-                            if (tmplData) {
+                            const tmplData = saveSectionAsTemplate ? saveSectionAsTemplate(node.id, name) : null;
+                            if (tmplData && addTemplate) {
                                 addTemplate(tmplData);
                                 alert(`"${name}" saved to Template Gallery!`);
+                            } else if (!addTemplate) {
+                                alert('Template functionality is currently unavailable.');
                             }
                         }
                     }}

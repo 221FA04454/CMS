@@ -10,6 +10,9 @@ export const useEditorStore = create(
     // View State
     mode: 'edit', // 'edit' | 'preview' | 'live'
     viewPort: 'desktop', // 'desktop' | 'tablet' | 'mobile'
+
+    // UI Feedback State
+    toastMessage: null,
     
     // Actions
     selectNode: (id) => set((state) => {
@@ -24,5 +27,11 @@ export const useEditorStore = create(
     setViewPort: (view) => set((state) => {
       state.viewPort = view;
     }),
+    showToast: (message) => set((state) => {
+      state.toastMessage = message;
+    }),
+    clearToast: () => set((state) => {
+      state.toastMessage = null;
+    })
   }))
 );

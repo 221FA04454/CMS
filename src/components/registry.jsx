@@ -17,8 +17,8 @@ export const COMPONENT_REGISTRY = {
     label: 'Section',
     category: 'layout',
     defaultProps: {
-      padding: '48px',
-      backgroundColor: '#ffffff',
+      padding: '64px',
+      backgroundColor: 'transparent',
     },
     propSchema: {
       padding: { type: 'text', label: 'Vertical Padding' },
@@ -30,41 +30,53 @@ export const COMPONENT_REGISTRY = {
     label: 'Container',
     category: 'layout',
     defaultProps: {
-      padding: '16px',
       flexDirection: 'column',
-      gap: '12px',
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      flexWrap: 'nowrap',
+      gap: '16px',
     },
     propSchema: {
       flexDirection: { 
         type: 'select', 
         label: 'Orientation', 
-        options: ['row', 'column'] 
+        options: ['row', 'column', 'row-reverse', 'column-reverse'] 
       },
-      gap: { type: 'text', label: 'Gap (px)' },
-      padding: { type: 'text', label: 'Padding' },
+      justifyContent: {
+        type: 'select',
+        label: 'Justify Content',
+        options: ['flex-start', 'center', 'flex-end', 'space-between', 'space-around']
+      },
+      alignItems: {
+        type: 'select',
+        label: 'Align Items',
+        options: ['stretch', 'flex-start', 'center', 'flex-end']
+      },
+      flexWrap: {
+        type: 'select',
+        label: 'Wrap',
+        options: ['nowrap', 'wrap', 'wrap-reverse']
+      },
+      gap: { type: 'text', label: 'Gap (px/rem)' },
     }
   },
   'Card': {
     component: Card,
     label: 'Card',
     category: 'layout',
-    defaultProps: {
-      backgroundColor: '#ffffff',
-    },
-    propSchema: {
-      backgroundColor: { type: 'color', label: 'Background Color' },
-    }
+    defaultProps: {},
+    propSchema: {}
   },
   'Heading': {
     component: Heading,
     label: 'Heading',
     category: 'basic',
     defaultProps: {
-      text: 'Hello World',
+      text: 'Build Something Amazing',
       level: 'h2',
     },
     propSchema: {
-      text: { type: 'text', label: 'Content' },
+      text: { type: 'textarea', label: 'Content' },
       level: { 
         type: 'select', 
         label: 'Level', 
@@ -77,7 +89,7 @@ export const COMPONENT_REGISTRY = {
     label: 'Paragraph',
     category: 'basic',
     defaultProps: {
-      content: 'This is a paragraph of text. Deeply customizable and responsive.',
+      content: 'FlexiSite gives you the power to design and develop without writing a single line of code. Leverage enterprise-grade components immediately.',
     },
     propSchema: {
       content: { type: 'textarea', label: 'Content' },
@@ -88,7 +100,7 @@ export const COMPONENT_REGISTRY = {
     label: 'Button',
     category: 'basic',
     defaultProps: {
-      text: 'Click Me',
+      text: 'Get Started',
       variant: 'primary',
     },
     propSchema: {
@@ -98,7 +110,7 @@ export const COMPONENT_REGISTRY = {
         label: 'Variant', 
         options: ['primary', 'secondary', 'danger', 'ghost'] 
       },
-      link: { type: 'text', label: 'URL/Link' },
+      link: { type: 'text', label: 'URL Target' },
     }
   },
   'Divider': {

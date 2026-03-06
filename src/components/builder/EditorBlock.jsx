@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 // Wrapper for Canvas Components to handle Drop and Selection
-const EditorBlock = ({ id, type, style, children, isContainer, onClick }) => {
+const EditorBlock = ({ id, type, style, children, isContainer, onClick, className }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: id,
     data: {
@@ -35,7 +35,8 @@ const EditorBlock = ({ id, type, style, children, isContainer, onClick }) => {
           "relative transition-all duration-200 outline-none",
           isSelected && "ring-2 ring-indigo-500 ring-offset-2 z-10",
           isOver && "ring-2 ring-indigo-400 bg-indigo-50/50",
-          !isSelected && !isOver && "hover:outline hover:outline-2 hover:outline-indigo-200" // Hover hint
+          !isSelected && !isOver && "hover:outline hover:outline-2 hover:outline-indigo-200", // Hover hint
+          className
         )
       )}
     >

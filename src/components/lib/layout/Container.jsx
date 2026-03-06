@@ -6,13 +6,25 @@ const Container = ({
   id, 
   children, 
   style = {},
-  className 
+  className,
+  flexDirection = 'column',
+  justifyContent = 'flex-start',
+  alignItems = 'stretch',
+  flexWrap = 'nowrap',
+  gap = '12px'
 }) => {
   return (
     <div
       id={id}
-      className={twMerge(clsx('flex flex-col w-full min-h-[50px]', className))}
-      style={style}
+      className={twMerge(clsx('flex w-full min-h-[50px] transition-all', className))}
+      style={{
+        ...style,
+        flexDirection,
+        justifyContent,
+        alignItems,
+        flexWrap,
+        gap
+      }}
     >
       {children}
     </div>
